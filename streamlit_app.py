@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # Set page config
-st.set_page_config(page_title="Streamlit YouTube Channel Dashboard", layout="wide")
+st.set_page_config(page_title="Compiance Risk Management Dashboard", layout="wide")
 
 def load_data():
     data = pd.read_csv("youtube_channel_data.csv")
@@ -25,7 +25,7 @@ def format_with_commas(number):
     return f"{number:,}"
     
 
-st.title("Streamlit YouTube Channel Dashboard")
+st.title("Compiance Risk Management Dashboard")
 
 logo_icon = "images/streamlit-mark-color.png"
 logo_image = "images/streamlit-logo-primary-colormark-lighttext.png"
