@@ -49,10 +49,10 @@ st.caption("Statistics")
 col = st.columns(4)
 with col[0]:
     with st.container(border=True):
-        st.metric("urrent Risk Score", format_with_commas(df['VIEWS'].sum()))
+        st.metric("Total Views", format_with_commas(df['VIEWS'].sum()))
 
         if time_frame == 'Daily':
-            df_views = df1[["DATE", "RISK_SCORE"]].set_index(df1.columns[0])
+            df_views = df1[["DATE", "VIEWS"]].set_index(df1.columns[0])
             st.area_chart(df_views, color='#FF9F36', height=150)
 
         if time_frame == 'Cumulative':
