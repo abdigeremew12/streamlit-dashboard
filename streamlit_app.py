@@ -49,20 +49,10 @@ st.caption("Statistics")
 
 
 col = st.columns(4)
-with col[0]:
-    with st.container(border=True):
-        st.metric("Total Subscribers", format_with_commas((df['SUBSCRIBERS_GAINED'].sum() - df['SUBSCRIBERS_LOST'].sum())))
-        if time_frame == 'Daily':
-            df_subscribers = df1[["DATE", "NET_SUBSCRIBERS"]].set_index(df1.columns[0])
-            st.area_chart(df_subscribers, color='#29b5e8', height=150)
-            
-        if time_frame == 'Cumulative':
-            df_subscribers = df2[["DATE", "NET_SUBSCRIBERS"]].set_index(df2.columns[0])
-            st.area_chart(df_subscribers, color='#29b5e8', height=150)
 
 with col[1]:
     with st.container(border=True):
-        st.metric("Total Views", format_with_commas(df['VIEWS'].sum()))
+        st.metric("Total Issues Reported", format_with_commas(df['VIEWS'].sum()))
 
         if time_frame == 'Daily':
             df_views = df1[["DATE", "VIEWS"]].set_index(df1.columns[0])
