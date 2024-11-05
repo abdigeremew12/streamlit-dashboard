@@ -109,28 +109,28 @@ if time_frame == 'Cumulative':
 cols = st.columns(4)
 with cols[0]:
     with st.container(border=True):
-        st.metric("Subscribers", format_with_commas(filtered_df['NET_SUBSCRIBERS'].sum()))
+        st.metric("Risk Score", format_with_commas(filtered_df['NET_SUBSCRIBERS'].sum()))
 
         df_subscribers_duration = filtered_df[["DATE", "NET_SUBSCRIBERS"]].set_index(filtered_df.columns[0])
         st.area_chart(df_subscribers_duration, color='#7D44CF', height=150)
 
 with cols[1]:
     with st.container(border=True):
-        st.metric("Views", format_with_commas(filtered_df['VIEWS'].sum()))
+        st.metric("Issues Reported", format_with_commas(filtered_df['VIEWS'].sum()))
 
         df_views_duration = filtered_df[["DATE", "VIEWS"]].set_index(filtered_df.columns[0])
         st.area_chart(df_views_duration, color='#D45B90', height=150)
 
 with cols[2]:
     with st.container(border=True):
-        st.metric("Watch Hours", format_with_commas(round(filtered_df['WATCH_HOURS'].sum(), 2)))
+        st.metric("Resolved Issues", format_with_commas(round(filtered_df['WATCH_HOURS'].sum(), 2)))
 
         df_watch_hours_duration = filtered_df[["DATE", "WATCH_HOURS"]].set_index(filtered_df.columns[0])
         st.area_chart(df_watch_hours_duration, color='#FF9F36', height=150)
 
 with cols[3]:
     with st.container(border=True):
-        st.metric("Likes", format_with_commas(filtered_df['LIKES'].sum()))
+        st.metric("Pending Issues", format_with_commas(filtered_df['LIKES'].sum()))
 
         df_likes_duration = filtered_df[["DATE", "LIKES"]].set_index(filtered_df.columns[0])
         st.area_chart(df_likes_duration, color='#29b5e8', height=150)
