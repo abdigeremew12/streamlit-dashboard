@@ -2,31 +2,34 @@ import streamlit as st
 import pandas as pd
 
 # Set page config
-st.set_page_config(page_title="Compliance Risk Dashboard", layout="wide")
+st.set_page_config(page_title="Streamlit YouTube Channel Dashboard", layout="wide")
 
 def load_data():
-    data = pd.read_csv("compliance_risk_data.csv")  # Update CSV file name
+    data = pd.read_csv("youtube_channel_data.csv")
     data['DATE'] = pd.to_datetime(data['DATE'])
+    data['NET_SUBSCRIBERS'] = data['SUBSCRIBERS_GAINED'] - data['SUBSCRIBERS_LOST']
     return data
 
 df = load_data()
 
-# Select relevant columns for compliance risk metrics
-df1 = df[['DATE', 'RISK_SCORE', 'ISSUES_REPORTED', 'RESOLVED_ISSUES', 'PENDING_ISSUES']]
+# Original
+df1 = df[['DATE', 'NET_SUBSCRIBERS', 'VIEWS', 'WATCH_HOURS', 'LIKES']]
 
-# Calculate row-wise cumulative sum for the selected metrics
+# Calculate row-wise cumulative sum
 df2 = df1.copy()
-for column in ['RISK_SCORE', 'ISSUES_REPORTED', 'RESOLVED_ISSUES', 'PENDING_ISSUES']:
+
+for column in ['NET_SUBSCRIBERS', 'VIEWS', 'WATCH_HOURS', 'LIKES']:
     df2[column] = df2[column].cumsum()
 
 def format_with_commas(number):
     return f"{number:,}"
+    
 
-st.title("Compliance Risk Dashboard")
+st.title("Streamlit YouTube Channel Dashboard")
 
 logo_icon = "images/streamlit-mark-color.png"
 logo_image = "images/streamlit-logo-primary-colormark-lighttext.png"
-st.image(logo_image, width=100)  # Adjusted image display
+st.logo(icon_image=logo_icon, image=logo_image)
 
 with st.sidebar:
     st.header("⚙️ Settings")
@@ -38,57 +41,61 @@ with st.sidebar:
         ("Daily", "Cumulative"),
     )
 
+
 # Display key metrics (Total)
 st.subheader("Key Metrics")
+
 st.caption("All-Time Statistics")
+
 
 col = st.columns(4)
 with col[0]:
     with st.container(border=True):
-        st.metric("Current Risk Score", format_with_commas(df['RISK_SCORE'].iloc[-1]))
+        st.metric("Total Subscribers", format_with_commas((df['SUBSCRIBERS_GAINED'].sum() - df['SUBSCRIBERS_LOST'].sum())))
         if time_frame == 'Daily':
-            df_risk_score = df1[["DATE", "RISK_SCORE"]].set_index(df1.columns[0])
-            st.area_chart(df_risk_score, color='#29b5e8', height=150)
-
+            df_subscribers = df1[["DATE", "NET_SUBSCRIBERS"]].set_index(df1.columns[0])
+            st.area_chart(df_subscribers, color='#29b5e8', height=150)
+            
         if time_frame == 'Cumulative':
-            df_risk_score = df2[["DATE", "RISK_SCORE"]].set_index(df2.columns[0])
-            st.area_chart(df_risk_score, color='#29b5e8', height=150)
+            df_subscribers = df2[["DATE", "NET_SUBSCRIBERS"]].set_index(df2.columns[0])
+            st.area_chart(df_subscribers, color='#29b5e8', height=150)
 
 with col[1]:
     with st.container(border=True):
-        st.metric("Total Issues Reported", format_with_commas(df['ISSUES_REPORTED'].sum()))
+        st.metric("Total Views", format_with_commas(df['VIEWS'].sum()))
 
         if time_frame == 'Daily':
-            df_issues_reported = df1[["DATE", "ISSUES_REPORTED"]].set_index(df1.columns[0])
-            st.area_chart(df_issues_reported, color='#FF9F36', height=150)
+            df_views = df1[["DATE", "VIEWS"]].set_index(df1.columns[0])
+            st.area_chart(df_views, color='#FF9F36', height=150)
 
         if time_frame == 'Cumulative':
-            df_issues_reported = df2[["DATE", "ISSUES_REPORTED"]].set_index(df2.columns[0])
-            st.area_chart(df_issues_reported, color='#FF9F36', height=150)
+            df_views = df2[["DATE", "VIEWS"]].set_index(df2.columns[0])
+            st.area_chart(df_views, color='#FF9F36', height=150)
 
 with col[2]:
     with st.container(border=True):
-        st.metric("Total Resolved Issues", format_with_commas(df['RESOLVED_ISSUES'].sum()))
+        st.metric("Total Watch Hours", format_with_commas((df['WATCH_HOURS'].sum())))
 
         if time_frame == 'Daily':
-            df_resolved_issues = df1[["DATE", "RESOLVED_ISSUES"]].set_index(df1.columns[0])
-            st.area_chart(df_resolved_issues, color='#D45B90', height=150)
+            df_views = df1[["DATE", "WATCH_HOURS"]].set_index(df1.columns[0])
+            st.area_chart(df_views, color='#D45B90', height=150)
 
         if time_frame == 'Cumulative':
-            df_resolved_issues = df2[["DATE", "RESOLVED_ISSUES"]].set_index(df2.columns[0])
-            st.area_chart(df_resolved_issues, color='#D45B90', height=150)
-
+            df_views = df2[["DATE", "WATCH_HOURS"]].set_index(df2.columns[0])
+            st.area_chart(df_views, color='#D45B90', height=150)
+        
 with col[3]:
     with st.container(border=True):
-        st.metric("Total Pending Issues", format_with_commas(df['PENDING_ISSUES'].sum()))
+        st.metric("Total Likes", format_with_commas(df['LIKES'].sum()))
 
         if time_frame == 'Daily':
-            df_pending_issues = df1[["DATE", "PENDING_ISSUES"]].set_index(df1.columns[0])
-            st.area_chart(df_pending_issues, color='#7D44CF', height=150)
-
+            df_views = df1[["DATE", "LIKES"]].set_index(df1.columns[0])
+            st.area_chart(df_views, color='#7D44CF', height=150)
+            
         if time_frame == 'Cumulative':
-            df_pending_issues = df2[["DATE", "PENDING_ISSUES"]].set_index(df2.columns[0])
-            st.area_chart(df_pending_issues, color='#7D44CF', height=150)
+            df_views = df2[["DATE", "LIKES"]].set_index(df2.columns[0])
+            st.area_chart(df_views, color='#7D44CF', height=150)
+
 
 # Display key metrics (Selected Duration)
 st.caption("Selected Duration")
@@ -104,31 +111,32 @@ if time_frame == 'Cumulative':
 cols = st.columns(4)
 with cols[0]:
     with st.container(border=True):
-        st.metric("Risk Score", format_with_commas(filtered_df['RISK_SCORE'].sum()))
+        st.metric("Subscribers", format_with_commas(filtered_df['NET_SUBSCRIBERS'].sum()))
 
-        df_risk_score_duration = filtered_df[["DATE", "RISK_SCORE"]].set_index(filtered_df.columns[0])
-        st.area_chart(df_risk_score_duration, color='#29b5e8', height=150)
+        df_subscribers_duration = filtered_df[["DATE", "NET_SUBSCRIBERS"]].set_index(filtered_df.columns[0])
+        st.area_chart(df_subscribers_duration, color='#7D44CF', height=150)
 
 with cols[1]:
     with st.container(border=True):
-        st.metric("Issues Reported", format_with_commas(filtered_df['ISSUES_REPORTED'].sum()))
+        st.metric("Views", format_with_commas(filtered_df['VIEWS'].sum()))
 
-        df_issues_duration = filtered_df[["DATE", "ISSUES_REPORTED"]].set_index(filtered_df.columns[0])
-        st.area_chart(df_issues_duration, color='#FF9F36', height=150)
+        df_views_duration = filtered_df[["DATE", "VIEWS"]].set_index(filtered_df.columns[0])
+        st.area_chart(df_views_duration, color='#D45B90', height=150)
 
 with cols[2]:
     with st.container(border=True):
-        st.metric("Resolved Issues", format_with_commas(filtered_df['RESOLVED_ISSUES'].sum()))
+        st.metric("Watch Hours", format_with_commas(round(filtered_df['WATCH_HOURS'].sum(), 2)))
 
-        df_resolved_duration = filtered_df[["DATE", "RESOLVED_ISSUES"]].set_index(filtered_df.columns[0])
-        st.area_chart(df_resolved_duration, color='#D45B90', height=150)
+        df_watch_hours_duration = filtered_df[["DATE", "WATCH_HOURS"]].set_index(filtered_df.columns[0])
+        st.area_chart(df_watch_hours_duration, color='#FF9F36', height=150)
 
 with cols[3]:
     with st.container(border=True):
-        st.metric("Pending Issues", format_with_commas(filtered_df['PENDING_ISSUES'].sum()))
+        st.metric("Likes", format_with_commas(filtered_df['LIKES'].sum()))
 
-        df_pending_duration = filtered_df[["DATE", "PENDING_ISSUES"]].set_index(filtered_df.columns[0])
-        st.area_chart(df_pending_duration, color='#7D44CF', height=150)
+        df_likes_duration = filtered_df[["DATE", "LIKES"]].set_index(filtered_df.columns[0])
+        st.area_chart(df_likes_duration, color='#29b5e8', height=150)
+
 
 with st.expander("See DataFrame"):
     st.dataframe(df)
