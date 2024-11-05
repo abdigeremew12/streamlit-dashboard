@@ -47,44 +47,53 @@ st.subheader("Risk Trend Analysis")
 
 st.caption("Statistics")
 
-
 col = st.columns(4)
+with col[0]:
+    with st.container(border=True):
+        st.metric("Current Risk Score", format_with_commas(df['RISK_SCORE'].iloc[-1]))
+        if time_frame == 'Daily':
+            df_risk_score = df1[["DATE", "RISK_SCORE"]].set_index(df1.columns[0])
+            st.area_chart(df_risk_score, color='#29b5e8', height=150)
+
+        if time_frame == 'Cumulative':
+            df_risk_score = df2[["DATE", "RISK_SCORE"]].set_index(df2.columns[0])
+            st.area_chart(df_risk_score, color='#29b5e8', height=150)
 
 with col[1]:
     with st.container(border=True):
-        st.metric("Total Issues Reported", format_with_commas(df['VIEWS'].sum()))
+        st.metric("Total Issues Reported", format_with_commas(df['ISSUES_REPORTED'].sum()))
 
         if time_frame == 'Daily':
-            df_views = df1[["DATE", "VIEWS"]].set_index(df1.columns[0])
-            st.area_chart(df_views, color='#FF9F36', height=150)
+            df_issues_reported = df1[["DATE", "ISSUES_REPORTED"]].set_index(df1.columns[0])
+            st.area_chart(df_issues_reported, color='#FF9F36', height=150)
 
         if time_frame == 'Cumulative':
-            df_views = df2[["DATE", "VIEWS"]].set_index(df2.columns[0])
-            st.area_chart(df_views, color='#FF9F36', height=150)
+            df_issues_reported = df2[["DATE", "ISSUES_REPORTED"]].set_index(df2.columns[0])
+            st.area_chart(df_issues_reported, color='#FF9F36', height=150)
 
 with col[2]:
     with st.container(border=True):
-        st.metric("Total Watch Hours", format_with_commas((df['WATCH_HOURS'].sum())))
+        st.metric("Total Resolved Issues", format_with_commas(df['RESOLVED_ISSUES'].sum()))
 
         if time_frame == 'Daily':
-            df_views = df1[["DATE", "WATCH_HOURS"]].set_index(df1.columns[0])
-            st.area_chart(df_views, color='#D45B90', height=150)
+            df_resolved_issues = df1[["DATE", "RESOLVED_ISSUES"]].set_index(df1.columns[0])
+            st.area_chart(df_resolved_issues, color='#D45B90', height=150)
 
         if time_frame == 'Cumulative':
-            df_views = df2[["DATE", "WATCH_HOURS"]].set_index(df2.columns[0])
-            st.area_chart(df_views, color='#D45B90', height=150)
-        
+            df_resolved_issues = df2[["DATE", "RESOLVED_ISSUES"]].set_index(df2.columns[0])
+            st.area_chart(df_resolved_issues, color='#D45B90', height=150)
+
 with col[3]:
     with st.container(border=True):
-        st.metric("Total Likes", format_with_commas(df['LIKES'].sum()))
+        st.metric("Total Pending Issues", format_with_commas(df['PENDING_ISSUES'].sum()))
 
         if time_frame == 'Daily':
-            df_views = df1[["DATE", "LIKES"]].set_index(df1.columns[0])
-            st.area_chart(df_views, color='#7D44CF', height=150)
-            
+            df_pending_issues = df1[["DATE", "PENDING_ISSUES"]].set_index(df1.columns[0])
+            st.area_chart(df_pending_issues, color='#7D44CF', height=150)
+
         if time_frame == 'Cumulative':
-            df_views = df2[["DATE", "LIKES"]].set_index(df2.columns[0])
-            st.area_chart(df_views, color='#7D44CF', height=150)
+            df_pending_issues = df2[["DATE", "PENDING_ISSUES"]].set_index(df2.columns[0])
+            st.area_chart(df_pending_issues, color='#7D44CF', height=150)
 
 
 # Display key metrics (Selected Duration)
