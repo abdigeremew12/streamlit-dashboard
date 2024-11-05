@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # Set page config
-st.set_page_config(page_title="Compiance Risk Management Dashboard", layout="wide")
+st.set_page_config(page_title="Compliance Risk Management Dashboard", layout="wide")
 
 def load_data():
     data = pd.read_csv("youtube_channel_data.csv")
@@ -43,9 +43,9 @@ with st.sidebar:
 
 
 # Display key metrics (Total)
-st.subheader("Key Metrics")
+st.subheader("Risk Trend Analysis")
 
-st.caption("All-Time Statistics")
+st.caption("Statistics")
 
 
 col = st.columns(4)
