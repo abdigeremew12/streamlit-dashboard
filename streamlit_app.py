@@ -25,7 +25,7 @@ def format_with_commas(number):
     return f"{number:,}"
     
 
-st.title("Compiance Risk Management Dashboard")
+st.title("Compliance Risk Management Dashboard")
 
 logo_icon = "images/streamlit-mark-color.png"
 logo_image = "images/streamlit-logo-primary-colormark-lighttext.png"
