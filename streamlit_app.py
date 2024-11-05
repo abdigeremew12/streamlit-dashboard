@@ -3,14 +3,15 @@ import pandas as pd
 from datetime import timedelta, datetime
 
 # Set page config
-st.set_page_config(page_title="YouTube Channel Dashboard", layout="wide")
+st.set_page_config(page_title="Compliance Risk Dashboard", layout="wide")
 
 # Helper functions
+
 @st.cache_data
 def load_data():
-    data = pd.read_csv("youtube_channel_data.csv")
+    data = pd.read_csv("compliance_risk_data.csv")
     data['DATE'] = pd.to_datetime(data['DATE'])
-    data['NET_SUBSCRIBERS'] = data['SUBSCRIBERS_GAINED'] - data['SUBSCRIBERS_LOST']
+    data['NET_INCIDENTS'] = data['INCIDENTS_REPORTED'] - data['INCIDENTS_RESOLVED']
     return data
 
 def custom_quarter(date):
@@ -30,22 +31,20 @@ def aggregate_data(df, freq):
         df = df.copy()
         df['CUSTOM_Q'] = df['DATE'].apply(custom_quarter)
         df_agg = df.groupby('CUSTOM_Q').agg({
-            'VIEWS': 'sum',
-            'WATCH_HOURS': 'sum',
-            'NET_SUBSCRIBERS': 'sum',
-            'LIKES': 'sum',
-            'COMMENTS': 'sum',
-            'SHARES': 'sum',
+            'TOTAL_RISKS': 'sum',
+            'ASSESSMENTS_COMPLETED': 'sum',
+            'NET_INCIDENTS': 'sum',
+            'REGULATORY_CHANGES': 'sum',
+            'OVERDUE_ISSUES': 'sum',
         })
         return df_agg
     else:
         return df.resample(freq, on='DATE').agg({
-            'VIEWS': 'sum',
-            'WATCH_HOURS': 'sum',
-            'NET_SUBSCRIBERS': 'sum',
-            'LIKES': 'sum',
-            'COMMENTS': 'sum',
-            'SHARES': 'sum',
+            'TOTAL_RISKS': 'sum',
+            'ASSESSMENTS_COMPLETED': 'sum',
+            'NET_INCIDENTS': 'sum',
+            'REGULATORY_CHANGES': 'sum',
+            'OVERDUE_ISSUES': 'sum',
         })
 
 def get_weekly_data(df):
@@ -112,7 +111,7 @@ st.logo(image="images/streamlit-logo-primary-colormark-lighttext.png",
         icon_image="images/streamlit-mark-color.png")
 
 with st.sidebar:
-    st.title("YouTube Channel Dashboard")
+    st.title("Compliance Risk Dashboard")
     st.header("⚙️ Settings")
     
     max_date = df['DATE'].max().date()
@@ -140,10 +139,10 @@ elif time_frame == 'Quarterly':
 st.subheader("All-Time Statistics")
 
 metrics = [
-    ("Total Subscribers", "NET_SUBSCRIBERS", '#29b5e8'),
-    ("Total Views", "VIEWS", '#FF9F36'),
-    ("Total Watch Hours", "WATCH_HOURS", '#D45B90'),
-    ("Total Likes", "LIKES", '#7D44CF')
+    ("Total Risks", "TOTAL_RISKS", '#29b5e8'),
+    ("Total Incidents", "NET_INCIDENTS", '#FF9F36'),
+    ("Assessments Completed", "ASSESSMENTS_COMPLETED", '#D45B90'),
+    ("Overdue Issues", "OVERDUE_ISSUES", '#7D44CF')
 ]
 
 cols = st.columns(4)
@@ -168,3 +167,4 @@ for col, (title, column, color) in zip(cols, metrics):
 # DataFrame display
 with st.expander('See DataFrame (Selected time frame)'):
     st.dataframe(df_filtered)
+
