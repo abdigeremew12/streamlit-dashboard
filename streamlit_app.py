@@ -49,7 +49,7 @@ st.caption("Statistics")
 col = st.columns(4)
 with col[0]:
     with st.container(border=True):
-        st.metric("TCurrent Risk Score", format_with_commas((df['RISK_SCORE'].sum() - df['SUBSCRIBERS_LOST'].sum())))
+        st.metric("Current Risk Score", format_with_commas((df['SUBSCRIBERS_GAINED'].sum() - df['SUBSCRIBERS_LOST'].sum())))
         if time_frame == 'Daily':
             df_subscribers = df1[["DATE", "NET_SUBSCRIBERS"]].set_index(df1.columns[0])
             st.area_chart(df_subscribers, color='#29b5e8', height=150)
@@ -60,7 +60,7 @@ with col[0]:
 
 with col[1]:
     with st.container(border=True):
-        st.metric("Total Issues Reported", format_with_commas(df['ISSUES_REPORTED'].sum()))
+        st.metric("Total Issues Reported", format_with_commas(df['VIEWS'].sum()))
 
         if time_frame == 'Daily':
             df_views = df1[["DATE", "VIEWS"]].set_index(df1.columns[0])
@@ -72,7 +72,7 @@ with col[1]:
 
 with col[2]:
     with st.container(border=True):
-        st.metric("Total Resolved Issues", format_with_commas((df['RESOLVED_ISSUES'].sum())))
+        st.metric("Total Resolved Issues", format_with_commas((df['WATCH_HOURS'].sum())))
 
         if time_frame == 'Daily':
             df_views = df1[["DATE", "WATCH_HOURS"]].set_index(df1.columns[0])
@@ -84,7 +84,7 @@ with col[2]:
         
 with col[3]:
     with st.container(border=True):
-        st.metric("otal Pending Issues", format_with_commas(df['PENDING_ISSUES'].sum()))
+        st.metric("Total Pending Issues", format_with_commas(df['LIKES'].sum()))
 
         if time_frame == 'Daily':
             df_views = df1[["DATE", "LIKES"]].set_index(df1.columns[0])
